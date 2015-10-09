@@ -1,0 +1,20 @@
+<div id="map" style='width: auto; height: 600px;'></div>
+
+<% content_for :extra_footer do %>
+  <% javascript_tag do %>
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+    if(navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(displayOnMap);
+      markers = handler.addMarkers(<%=raw @hash.to_json %>);
+      handler.getMap().setZoom(2);
+  });
+
+  function displayOnMap(position){
+    var marker = handler.addMarker({
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
+    });
+  };
+  <% end %>
+  <% end %>
